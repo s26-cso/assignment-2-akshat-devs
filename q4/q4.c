@@ -10,7 +10,7 @@ int main() {
     int a, b;
 
     while (scanf("%s %d %d", op, &a, &b) == 3) {
-        char libname[12];
+        char libname[15];
         snprintf(libname, sizeof(libname), "./lib%s.so", op);
 
         void* handle = dlopen(libname, RTLD_LAZY);
