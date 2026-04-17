@@ -122,49 +122,46 @@ ret
 
 .globl getAtMost
 getAtMost:
-addi sp, sp, -32
+addi sp, sp, -48
 sd ra, 0(sp)
 sd s0, 8(sp)
 sd s1, 16(sp)
 sd s2, 24(sp)
+sd s3, 32(sp)
 
-li t0, -1        # t0 = floor
-loop:
-beqz a0, ending
+mv s3, a0          # s3 = val
+mv s2, a1          # s2 = root
+li s0, -1          # s0 = answer
 
-lw s0, 0(a0)         # s0 = root->data
-ld s1, 8(a0)         # s1 = root->left
-ld s2, 16(a0)        # s2 = root->right
+atmloop:
+beqz s2, atmending
 
-beq s0, a1, atmfound
-blt s0, a1, atmrightSide
-bgt s0, a1, atmleftSide
+lw s1, 0(s2)       # s1 = root->val
+beq s1, s3, atmfound
+blt s1, s3, atmright
+j atmleft
 
 atmfound:
-mv t0, s0
-mv a0, t0
-
-ld ra, 0(sp)
-ld s0, 8(sp)
-ld s1, 16(sp)
-ld s2, 24(sp)
-addi sp, sp, 32
-ret
-
-atmrightSide:
-mv t0, s0
-mv a0, s2
-j loop
-
-atmleftSide:
 mv a0, s1
-j loop
+j atmdone
 
-ending:
-mv a0, t0
+atmright:
+mv s0, s1          # current node is a valid candidate
+ld s2, 16(s2)      # move to right child
+j atmloop
+
+atmleft:
+ld s2, 8(s2)       # move to left child
+j atmloop
+
+atmending:
+mv a0, s0
+
+atmdone:
 ld ra, 0(sp)
 ld s0, 8(sp)
 ld s1, 16(sp)
 ld s2, 24(sp)
-addi sp, sp, 32
+ld s3, 32(sp)
+addi sp, sp, 48
 ret
