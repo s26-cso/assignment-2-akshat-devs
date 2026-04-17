@@ -73,14 +73,14 @@ ret
 
 .globl get
 get:
-beqz a0, nullroot
-j notnullroot
+beqz a0, getnullroot
+j getnotnullroot
 
-nullroot:
+getnullroot:
 li a0, 0
 ret
 
-notnullroot:
+getnotnullroot:
 addi sp, sp, -48
 sd ra, 0(sp)
 sd s0, 8(sp)
@@ -92,26 +92,26 @@ lw s0, 0(a0)
 ld s1, 8(a0)
 ld s2, 16(a0)
 mv s3, a1
-beq s0, s3, found
-blt s0, s3, rightSide
-bgt s0, s3, leftSide
+beq s0, s3, getfound
+blt s0, s3, getrightSide
+bgt s0, s3, getleftSide
 
-found:
-j end
+getfound:
+j getend
 
-leftSide:
+getleftSide:
 mv a0, s1
 mv a1, s3
 call get
-j end
+j getend
 
-rightSide:
+getrightSide:
 mv a0, s2
 mv a1, s3
 call get
-j end
+j getend
 
-end:
+getend:
 ld ra, 0(sp)
 ld s0, 8(sp)
 ld s1, 16(sp)
@@ -136,11 +136,11 @@ lw s0, 0(a0)         # s0 = root->data
 ld s1, 8(a0)         # s1 = root->left
 ld s2, 16(a0)        # s2 = root->right
 
-beq s0, a1, found
-blt s0, a1, rightSide
-bgt s0, a1, leftSide
+beq s0, a1, atmfound
+blt s0, a1, atmrightSide
+bgt s0, a1, atmleftSide
 
-found:
+atmfound:
 mv t0, s0
 mv a0, t0
 
@@ -151,12 +151,12 @@ ld s2, 24(sp)
 addi sp, sp, 32
 ret
 
-rightSide:
+atmrightSide:
 mv t0, s0
 mv a0, s2
 j loop
 
-leftSide:
+atmleftSide:
 mv a0, s1
 j loop
 
