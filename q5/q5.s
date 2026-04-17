@@ -10,6 +10,7 @@ fmt:
 fmt2:
 .string "No\n"
 
+.text
 .globl main
 main:
 addi sp, sp, -48
