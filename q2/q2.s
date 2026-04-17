@@ -1,8 +1,12 @@
+.data
 fmt:
 .string "%d "
 
 fmt2:
 .string "\n"
+
+fmt3:
+.string "%d"
 
 .text
 .globl main
@@ -106,7 +110,13 @@ slli t1, s2, 2
 add t1, t1, s4
 lw t2, 0(t1)
 mv a1, t2
+addi t3, s0, -1
+beq s2, t3, last
 lla a0, fmt
+j print
+last:
+lla a0, fmt3
+print:
 call printf
 addi s2, s2, 1
 j printLoop
@@ -128,6 +138,3 @@ ld s5, 48(sp)
 ld s6, 56(sp)
 addi sp, sp, 64
 ret
-
-
-
